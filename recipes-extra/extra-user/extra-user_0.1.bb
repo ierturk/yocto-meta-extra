@@ -1,33 +1,32 @@
-SUMMARY = "Extra user accounts"
-DESCRIPTION = "Set up user accounts for non-root usera"
+SUMMARY = "Example recipe for using inherit useradd"
+DESCRIPTION = "This recipe serves as an example for using features from useradd.bbclass"
+SECTION = "examples"
+PR = "r1"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384361b4de20420"
+
+S = "${WORKDIR}"
 
 EXCLUDE_FROM_WORLD = "1"
-INHIBIT_DEFAULT_DEPS = "1"
 
-ALLOW_EMPTY:${PN} = "1"
+inherit useradd
 
-FILESEXTRAPATHS:prepend := "${THISDIR}/sudo:"
+USERADD_PACKAGES = "${PN}"
 
-SRC_URI:append = " \
-    file://sudoers.extra \
-"
+GROUPADD_PARAM:${PN} = "-g 988 render; -g 1000 ierturk"
+USERADD_PARAM:${PN} = "-G adm,sudo,users,plugdev,audio,video,dialout,input,docker,render -p 1nyv3S0bODNy2 -u 1000 -d /home/ierturk -r -s /bin/bash ierturk"
 
-# We explicitly require pam
-inherit features_check
+INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
 
-REQUIRED_DISTRO_FEATURES = "pam"
-
-do_install:append () {
-    install -m 0755 -d ${D}${sysconfdir}/sudoers.d
-    install -m 0440 ${WORKDIR}/sudoers.extra ${D}${sysconfdir}/sudoers.d/50-ierturk
-}
 
 pkg_postinst_ontarget_${PN} () {
     if [ ! -e /etc/.passwd_changed ]; then
         passwd -e ierturk
         touch /etc/.passwd_changed
     fi
-}
 
+    if [ -e /mnt/etc/nvidia-container-runtime/host-files-for-container.d/libcublas.csv ]; then
+       /mnt/etc/nvidia-container-runtime/host-files-for-container.d/libcublas.csv \
+        /mnt/etc/nvidia-container-runtime/libcublas.csv
+    fi
+}
