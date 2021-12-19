@@ -29,8 +29,8 @@ pkg_postinst_ontarget:${PN} () {
         touch /etc/.passwd_changed
     fi
 
-    if [ -e /mnt/etc/nvidia-container-runtime/host-files-for-container.d/libcublas.csv ]; then
-       /mnt/etc/nvidia-container-runtime/host-files-for-container.d/libcublas.csv \
-        /mnt/etc/nvidia-container-runtime/libcublas.csv
+    if [ -e /etc/nvidia-container-runtime/host-files-for-container.d/libcublas.csv ]; then
+       /etc/nvidia-container-runtime/host-files-for-container.d/libcublas.csv \
+        /etc/nvidia-container-runtime/libcublas.csv
     fi
 }
