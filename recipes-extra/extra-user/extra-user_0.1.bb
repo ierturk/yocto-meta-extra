@@ -25,9 +25,12 @@ do_install:append () {
 }
 
 inherit extrausers
+inherit features_check
+
 PASSWORD = "password"
 USER = "ierturk"
 
+IMAGE_CLASSES += "extrausers"
 EXTRA_USERS_PARAMS = "\
     useradd -p `openssl passwd ${PASSWORD}` -ms /bin/bash ${USER}; \
     usermod -a -G adm,sudo,users,plugdev,audio,video,dialout,input,docker ${USER}; \
