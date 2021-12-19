@@ -24,18 +24,6 @@ do_install:append () {
     install -m 0440 ${WORKDIR}/sudoers.extra ${D}${sysconfdir}/sudoers.d/50-ierturk
 }
 
-inherit extrausers
-inherit features_check
-
-PASSWORD = "password"
-USER = "ierturk"
-
-IMAGE_CLASSES += "extrausers"
-EXTRA_USERS_PARAMS = "\
-    useradd -p `openssl passwd ${PASSWORD}` -ms /bin/bash ${USER}; \
-    usermod -a -G adm,sudo,users,plugdev,audio,video,dialout,input,docker ${USER}; \
-"
-
 pkg_postinst_ontarget_${PN} () {
     if [ ! -e /etc/.passwd_changed ]; then
         passwd -e ierturk
