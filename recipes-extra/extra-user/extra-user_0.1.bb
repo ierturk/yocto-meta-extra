@@ -30,7 +30,7 @@ pkg_postinst_ontarget:${PN} () {
     fi
 
     if [ -e /etc/nvidia-container-runtime/host-files-for-container.d/libcublas.csv ]; then
-       /etc/nvidia-container-runtime/host-files-for-container.d/libcublas.csv \
+       mv /etc/nvidia-container-runtime/host-files-for-container.d/libcublas.csv \
         /etc/nvidia-container-runtime/libcublas.csv
     fi
 }
